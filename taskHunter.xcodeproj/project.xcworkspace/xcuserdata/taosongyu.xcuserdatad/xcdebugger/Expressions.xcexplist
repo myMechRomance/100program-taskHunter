@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "taskHunter.printTaskTypes(printInfos:):Task.swift">
+      </ContextState>
+      <ContextState
+         contextName = "taskHunter.setType(dailyTaskId:type:):Task.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "taskTypes[taskTypeId].tasks">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "taskHunterTests.test_printTaskTypes():taskHunterTests.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
