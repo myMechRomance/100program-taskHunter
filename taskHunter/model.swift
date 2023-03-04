@@ -7,21 +7,6 @@
 
 import Foundation
 
-protocol Access2TaskType {
-    associatedtype TaskType
-    var type: TaskType {get}
-}
-//protocol Access2Task {
-//    associatedtype Task
-//    var task: Task {get set}
-//}
-///用于Date和"yyyy-MM-dd"的转换
-class Yyyy_MM_dd {
-    let DF = DateFormatter()
-    init() {
-        DF.dateFormat = "yyyy-MM-dd"
-    }
-}
 class Model_TH {
     //预定义类型
     ///标记任务完成状态
@@ -31,37 +16,33 @@ class Model_TH {
         case Done = "Done"
         case Failed = "Failed"
     }
-    var yyyy_MM_dd = Yyyy_MM_dd()
 
     ///一项任务，类比一个怪物
-    struct Task: Access2TaskType, Hashable {
-        typealias myType = TaskType
-        
+    struct Task: Equatable{
         var title = "New monster"  //标题
         var comment = "None"  //描述
         var date = Date()  //创建日期
         var state: State = .notStarted  //完成状态
-        var type: myType  //种类
+        var img = "undefined/lv1"  //图片
         
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(title)
-            hasher.combine(date)
-        }
-        var img: String {
+        var dateStr: String {
             get {
-                return type.title+"/"+String(hashValue)
+                let time2Str = DateFormatter()
+                time2Str.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+                return time2Str.string(from: date)
             }
         }
-        
+        var stateStr: String {
+            get {
+                return state.rawValue
+            }
+        }
     }
     ///标记一类任务，类比一个种族
-    struct TaskType: Hashable {
-        var title = "New race"
-        var comment = "None"
-        var tasks: Array<Task>
+    struct TaskType: TreeNode<Task>{
+        var tasks: TreeNode
         //        var notStartedCount = 0
         //        var toBeDoneCount = 0
-
         var doneCount = 0
         var failedCount = 0
         var successRate: Int {
@@ -92,22 +73,33 @@ class Model_TH {
         //                }
         //            }
         //        }
+        //若标题相同，则属于同一任务
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(title)
+        }
     }
     ///标记某天的任务
     struct DailyTasks {
         var date = Date()
         var tasks: Array<Int> = []
     }
+    
+    
+    
     //属性
 //    private(set) var tasks: Array<Task> = []  //用于保存历史记录过的所有任务
     private(set) var taskTypes: Array<TaskType> = [] //用于保存所有任务类型
     private(set) var dailyTasks = DailyTasks()  //用于存储今天任务
     private(set) var today = "2023-02-23" //TODO: 修改为当天时间
+    
+    
+    //方法
+    init() {}
     ///测试用初始化函数，预设了任务
     init(taskTypes: Array<TaskType>) {
-//        self.tasks=tasks
         self.taskTypes=taskTypes
     }
+    
     //MARK: 添加任务类方法。顺序：*addTaskType->addTask->addDailyTask
     ///向tasks添加新任务，返回在tasks中的索引
     func addTask(title: String, comment: String, type_id: Int) -> Int {
