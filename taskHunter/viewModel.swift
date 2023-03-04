@@ -8,12 +8,58 @@
 import SwiftUI
 
 class ViewModel_TH: ObservableObject {
-    @Published private var model: Model_TH
-    init() {
-        self.model = Model_TH()
-        
+    @Published private var model = Model_TH(ifTest: true)
+    var taskNum: Int {
+        get {
+            return model.dailyTasks.tasks.count
+        }
     }
-    init(_ model: Model_TH) {
-        self.model = model
+    //MARK: 提取model中要应用到视图中的信息
+    struct TaskInfo {
+        var title = ""
+        var finished = false
+        var enabled = false
+        var img = ""
+        
+        var out = ""
+    }
+    struct TaskDetailInfo {
+        var title = ""
+        var type: String? = nil
+        var comment = ""
+        var startTime = "00:00"
+        var endTime = "23:59"
+        var state = ""
+        var img = ""
+        
+        var out = ""
+    }
+    
+    func getTaskInfo(task_id: Int) -> TaskInfo {
+        var taskInfo = TaskInfo()
+        taskInfo.title = model.dailyTasks.tasks[task_id].title
+        taskInfo.finished = model.dailyTasks.tasks[task_id].state == .Done
+        taskInfo.enabled = taskInfo.finished || model.dailyTasks.tasks[task_id].state == .toBeDone
+        taskInfo.img = model.dailyTasks.tasks[task_id].img
+        
+        taskInfo.out = model.dailyTasks.tasks[task_id].state.rawValue
+        return taskInfo
+    }
+    
+    func getTaskDetailInfo(task_id: Int) -> TaskDetailInfo {
+        var taskDetailInfo = TaskDetailInfo()
+        taskDetailInfo.title = model.dailyTasks.tasks[task_id].title
+        taskDetailInfo.type = model.dailyTasks.tasks[task_id].type
+        let HH_mm = DateFormatter()
+        HH_mm.dateFormat = "HH:mm"
+        taskDetailInfo.startTime = HH_mm.string(from: model.dailyTasks.tasks[task_id].date+model.dailyTasks.tasks[task_id].startTime)
+        taskDetailInfo.endTime = HH_mm.string(from: model.dailyTasks.tasks[task_id].date+model.dailyTasks.tasks[task_id].endTime)
+        taskDetailInfo.state = model.dailyTasks.tasks[task_id].state.rawValue
+        taskDetailInfo.img = model.dailyTasks.tasks[task_id].img
+        
+        let testDF = DateFormatter()
+        testDF.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        taskDetailInfo.out = testDF.string(from: model.dailyTasks.tasks[task_id].date)
+        return taskDetailInfo
     }
 }
