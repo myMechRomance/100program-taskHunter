@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Model_TH {
+struct Model_TH {
     //预定义类型
     ///标记任务完成状态
     enum State: String{
@@ -27,19 +27,17 @@ class Model_TH {
             let calendar = Calendar.current
             let dateComponents = calendar.dateComponents([.year, .month, .day], from: Date())
             let startOfDay = calendar.date(from: dateComponents)!
-            //TODO: 测试
-            print("date used!")
             return startOfDay
         }()  //创建日期（当天零点）
         var startTime = TimeInterval(0)  //开始时间（以秒计算）
-        var endTime = TimeInterval(24*60*60-1)  //结束时间（以秒计算）
+        var endTime = TimeInterval(24*60*60-60)  //结束时间（以秒计算）
         var state: State = .notStarted  //完成状态
-        var img: Image?  //图片
+        var img: String  //图片
         var type: String?
         
         var timer: TimeInterval {
             mutating get {
-                var time = Date().timeIntervalSince(date)
+                let time = Date().timeIntervalSince(date)
                 if time >= startTime && state == .notStarted {
                     state = .toBeDone
                 }
@@ -49,18 +47,18 @@ class Model_TH {
                 return endTime-time
             }
         }
-        var dateStr: String {
-            get {
-                let time2Str = DateFormatter()
-                time2Str.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-                return time2Str.string(from: date ?? Date(timeIntervalSince1970: 0))
-            }
-        }
-        var stateStr: String {
-            get {
-                return state.rawValue
-            }
-        }
+//        var dateStr: String {
+//            get {
+//                let time2Str = DateFormatter()
+//                time2Str.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+//                return time2Str.string(from: date ?? Date(timeIntervalSince1970: 0))
+//            }
+//        }
+//        var stateStr: String {
+//            get {
+//                return state.rawValue
+//            }
+//        }
     }
 //    ///标记一类任务，类比一个种族
 //    struct TaskType: Equatable {
@@ -148,28 +146,31 @@ class Model_TH {
     //方法
     init() {}
     ///测试用初始化函数，预设了任务
-//    init(taskTypes: Array<TaskType>) {
-//        self.taskTypes=taskTypes
-//    }
-    //TODO: 随机生成不同的图像
-    private func genImg(type_id: Int, level: Int) -> Image {
-        let srcImg = taskTypes[type_id].title+"/lv"+String(level)
-        print("Generating img from "+srcImg)
-        return Image(srcImg)
+    init(ifTest: Bool) {
+        assert(ifTest)
+//        addTaskType(title: "land", comment: "Monster live on land.")
+        var greatJagras_id = addTask(title: "Great Jagras", comment: "It looks pregnated.", type_id: 0)
+        var tobiKadachi_id = addTask(title: "Tobi Kadachi", comment: "Its fur can generate electricity by friction.", type_id: 0)
+//        bird_id = model.addTaskType(title: "bird", comment: "Monster can fly.")
+        var pukeiPukei_id = addTask(title: "Pukei-Pukei", comment: "It has a good appetite.", type_id: 1)
+    }
+    //TODO: 随机生成不同的图像，返回其路径
+    private func genImg(type_id: Int, level: Int) -> String {
+//        let srcImg = taskTypes[type_id].title+"/lv"+String(level)
+//        print("Generating img from "+srcImg)
+        return "undefined-lv1"
     }
     //MARK: 添加任务类方法。顺序：*addTaskType->addTask->addDailyTask
     ///向dailyTasks添加新任务，返回在dailyTasks中的索引
-    public func addTask(title: String, comment: String, type_id: Int) {
+    mutating public func addTask(title: String, comment: String, type_id: Int) -> Int {
 //        assert(type_id>=0 && type_id<taskTypes.count)
         let img = genImg(type_id: type_id, level: 0)
         let task=Task(title: title,
                       comment: comment,
-                      date: dailyTasks.date,
-                      state: .notStarted,
                       img: img,
-                      type: taskTypes[type_id].title)
+                      type: String(type_id))
         dailyTasks.tasks.append(task)
-//        return taskTypes[type_id].tasks.last!.hashValue  //返回该任务的哈希值
+        return dailyTasks.tasks.count-1
     }
     ///向taskType添加新类型，返回在taskTypes中的索引
 //    public func addTaskType(title: String, comment: String) -> Int {
@@ -181,7 +182,7 @@ class Model_TH {
 //        return taskTypes.count-1
 //    }
     ///在dailyTasks中删除任务
-    public func delTask(task_id: Int) {
+    mutating public func delTask(task_id: Int) {
         assert(task_id>=0 && task_id<dailyTasks.tasks.count)
         dailyTasks.tasks.remove(at: task_id)
     }
@@ -306,14 +307,14 @@ class Model_TH {
 //            print("")  //换行
 //        }
 //    }
-//    ///打印今日任务列表
-//    func printDailyTasks() {
-//        var dailyTaskStr = "dailyTasks: ["
-//        for dailyTask in dailyTasks.tasks {
-//            dailyTaskStr += "\(tasks[dailyTask].title), "
-//        }
-//        print("\(dailyTaskStr)] ")
-//    }
+    ///打印今日任务列表
+    func printDailyTasks() {
+        var dailyTaskStr = "dailyTasks: ["
+        for dailyTask in dailyTasks.tasks {
+            dailyTaskStr += "\(dailyTask.title), "
+        }
+        print("\(dailyTaskStr)] ")
+    }
 //
 //    ///清空taskTypes
 //    func clearTaskTypes() {
