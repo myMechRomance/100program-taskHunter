@@ -7,6 +7,21 @@
 
 import Foundation
 
+protocol Access2TaskType {
+    associatedtype TaskType
+    var type: TaskType {get}
+}
+//protocol Access2Task {
+//    associatedtype Task
+//    var task: Task {get set}
+//}
+///用于Date和"yyyy-MM-dd"的转换
+class Yyyy_MM_dd {
+    let DF = DateFormatter()
+    init() {
+        DF.dateFormat = "yyyy-MM-dd"
+    }
+}
 class Model_TH {
     //预定义类型
     ///标记任务完成状态
@@ -16,35 +31,37 @@ class Model_TH {
         case Done = "Done"
         case Failed = "Failed"
     }
+    var yyyy_MM_dd = Yyyy_MM_dd()
+
     ///一项任务，类比一个怪物
-    struct Task {
-        var title = "New monster"  //任务标题
-        var comment = "None"  //任务描述
-        var date = Date()  //常量??
-        var state: State = .notStarted
-        var type = "Undefined"  //任务所属分类
-        var successRate = 0  //任务成功率,用百分数表示
-        var img = "-1"
+    struct Task: Access2TaskType, Hashable {
+        typealias myType = TaskType
         
+        var title = "New monster"  //标题
+        var comment = "None"  //描述
+        var date = Date()  //创建日期
+        var state: State = .notStarted  //完成状态
+        var type: myType  //种类
         
-        func dateStr(format: DateFormatter) -> String {
-            return format.string(from: date)
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(title)
+            hasher.combine(date)
         }
-        
-        func typeStr(taskTypes: inout Array<TaskType>) -> String {
-            if type<0 || type>=taskTypes.count {
-                return "Undefined"
+        var img: String {
+            get {
+                return type.title+"/"+String(hashValue)
             }
-            return taskTypes[type].title
         }
+        
     }
     ///标记一类任务，类比一个种族
-    struct TaskType {
+    struct TaskType: Hashable {
         var title = "New race"
         var comment = "None"
-        var tasks: Array<Int> = []
+        var tasks: Array<Task>
         //        var notStartedCount = 0
         //        var toBeDoneCount = 0
+
         var doneCount = 0
         var failedCount = 0
         var successRate: Int {
@@ -57,6 +74,7 @@ class Model_TH {
                 }
             }
         }
+        
         //        mutating func addTask(task: Int) {
         //            tasks.append(task)
         //        }
@@ -81,37 +99,28 @@ class Model_TH {
         var tasks: Array<Int> = []
     }
     //属性
-    private(set) var tasks: Array<Task> = []  //用于保存历史记录过的所有任务
+//    private(set) var tasks: Array<Task> = []  //用于保存历史记录过的所有任务
     private(set) var taskTypes: Array<TaskType> = [] //用于保存所有任务类型
     private(set) var dailyTasks = DailyTasks()  //用于存储今天任务
     private(set) var today = "2023-02-23" //TODO: 修改为当天时间
-    let yyyy_MM_dd = DateFormatter()
-    //方法
-    init() {
-        yyyy_MM_dd.dateFormat = "yyyy-MM-dd"
-        //TODO: 设置定时器用以每日更新
-        
-    }
     ///测试用初始化函数，预设了任务
-    init(tasks: Array<Task>, taskTypes: Array<TaskType>) {
-        yyyy_MM_dd.dateFormat = "yyyy-MM-dd"
-        self.tasks=tasks
+    init(taskTypes: Array<TaskType>) {
+//        self.tasks=tasks
         self.taskTypes=taskTypes
     }
     //MARK: 添加任务类方法。顺序：*addTaskType->addTask->addDailyTask
     ///向tasks添加新任务，返回在tasks中的索引
-    func addTask(title: String, comment: String, type: Int) -> Int {
-        assert(type>=0 && type<taskTypes.count)
+    func addTask(title: String, comment: String, type_id: Int) -> Int {
+        assert(type_id>=0 && type_id<taskTypes.count)
         let task=Task(title: title,
                       comment: comment,
-                      date: yyyy_MM_dd.date(from: today) ?? Date(timeIntervalSinceNow: 0),
+                      date: yyyy_MM_dd.DF.date(from: today) ?? Date(timeIntervalSinceNow: 0),
                       state: .notStarted,
-                      type: type)
-        tasks.append(task)
+                      type: taskTypes[type_id])
+        
         //加入对应的TaskType.tasks中
-        let taskId = tasks.count-1
-        taskTypes[type].tasks.append(taskId)
-        return taskId
+        taskTypes[type_id].tasks.append(task)
+        return taskTypes[type_id].tasks.last!.hashValue  //返回该任务的哈希值
     }
     ///向taskType添加新类型，返回在taskTypes中的索引
     func addTaskType(title: String, comment: String) -> Int {
