@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Model_TH {
+struct Model_TH: {
     //预定义类型
     ///标记任务完成状态
     enum State: String{
@@ -141,8 +141,7 @@ struct Model_TH {
     //属性
 //    private(set) var tasks: Array<Task> = []  //用于保存历史记录过的所有任务
 //    private(set) var taskTypes: Array<TaskType> = [] //用于保存所有任务类型
-    private(set) var dailyTasks = DailyTasks(Date())  //用于存储今天任务
-    
+    @Published private(set) var dailyTasks = DailyTasks(Date())  //用于存储今天任务
     //方法
     init() {}
     ///测试用初始化函数，预设了任务

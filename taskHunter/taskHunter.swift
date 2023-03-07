@@ -26,7 +26,7 @@ struct taskHunterApp: App {
 //        ]))
     var body: some Scene {
         WindowGroup {
-            View_TH()
+            ContentView()
         }
     }
 }

@@ -8,12 +8,17 @@
 import SwiftUI
 
 class ViewModel_TH: ObservableObject {
-    @Published private var model = Model_TH(ifTest: true)
+    @Published var model = Model_TH(ifTest: true)
     var taskNum: Int {
         get {
             return model.dailyTasks.tasks.count
         }
     }
+//    var taskTypeNum: Int {
+//        get {
+//            return model.t
+//        }
+//    }
     //MARK: 提取model中要应用到视图中的信息
     struct TaskInfo {
         var title = ""
@@ -23,18 +28,6 @@ class ViewModel_TH: ObservableObject {
         
         var out = ""
     }
-    struct TaskDetailInfo {
-        var title = ""
-        var type: String? = nil
-        var comment = ""
-        var startTime = "00:00"
-        var endTime = "23:59"
-        var state = ""
-        var img = ""
-        
-        var out = ""
-    }
-    
     func getTaskInfo(task_id: Int) -> TaskInfo {
         var taskInfo = TaskInfo()
         taskInfo.title = model.dailyTasks.tasks[task_id].title
@@ -46,6 +39,17 @@ class ViewModel_TH: ObservableObject {
         return taskInfo
     }
     
+    struct TaskDetailInfo {
+        var title = ""
+        var type: String? = nil
+        var comment = ""
+        var startTime = "00:00"
+        var endTime = "23:59"
+        var state = ""
+        var img = ""
+        
+        var out = ""
+    }
     func getTaskDetailInfo(task_id: Int) -> TaskDetailInfo {
         var taskDetailInfo = TaskDetailInfo()
         taskDetailInfo.title = model.dailyTasks.tasks[task_id].title
@@ -62,4 +66,8 @@ class ViewModel_TH: ObservableObject {
         taskDetailInfo.out = testDF.string(from: model.dailyTasks.tasks[task_id].date)
         return taskDetailInfo
     }
+    
+//    func addTask(title: String, comment: String, type_id: Int) -> Int {
+//        return model.addTask(title: title, comment: comment, type_id: type_id)
+//    }
 }

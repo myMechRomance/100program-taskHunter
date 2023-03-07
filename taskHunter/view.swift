@@ -4,34 +4,23 @@
 //
 //  Created by Taosong YU on 2023/2/21.
 //
+let defaultImg = "undefined-lv0"
 
 import SwiftUI
 
-struct View_TH: View {
+struct ContentView: View {
     @ObservedObject var viewModel = ViewModel_TH()
-    //TODO: 测试代码，删去
-//    @State private var taskViews = [
-//        TaskView(img: "child-大凶豺龙", title: "Great Jagras", type: "land"),
-//        TaskView(img: "child-毒妖鸟", title: "Pukei-Pukei", type: "bird"),
-//        TaskView(img: "child-飞雷龙", title: "Tobi Kadachi", type: "land"),
-//    ]
-//    @State private var taskDetailViews = [
-//        TaskDetailView(img: "child-大凶豺龙", title: "Great Jagras", type: "land", comment: "It looks pregnated.", successRate: 25),
-//        TaskDetailView(img: "child-毒妖鸟", title: "Pukei-Pukei", type: "bird", comment: "It has a good appetite.", successRate: 50),
-//        TaskDetailView(img: "child-飞雷龙", title: "Tobi Kadachi", type: "land", comment: "Its fur can generate electricity by friction.", successRate: 76)
-//    ]
-    //    init(_viewModel: ViewModel_TH) {
-    //        viewModel = _viewModel
-    //        //TODO: 将view和viewModel相连
-    //    }
     func getFormattedDate(_ format: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: Date())
     }
-    func void() {
-        //TODO: 补全“添加任务”按钮按下后的动作
-    }
+    @State var title = ""
+    @State var comment = ""
+    @State var type_id = -1
+    @State var typeName: String?
+    @State var ifCreateNewTask = false
+    
     var body: some View {
         //main view
         VStack {
@@ -50,9 +39,31 @@ struct View_TH: View {
                             .bold()
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("➕", action: void)
+                        Button("➕") {
+                            ifCreateNewTask = true
+                        }
                             .font(.title)
                             .bold()
+                    }
+                }
+                .sheet(isPresented: $ifCreateNewTask) {
+                    //添加新任务弹窗
+                    TextField("Title", text: $title).font(.title)
+                    TextField("Comment", text: $comment).font(.title)
+                    Picker("Type", selection: $type_id) {
+                        ForEach(0..<5) {type_id in
+                            Text(String(type_id)).tag(type_id)
+                        }
+                    }
+                    Spacer()
+                    Button("OK") {
+                        if title != "" {
+                            if typeName != nil {
+                                //TODO: 增加新种类
+                            }
+                            viewModel.model.addTask(title: title, comment: comment, type_id: type_id)
+                            ifCreateNewTask = false
+                        }
                     }
                 }
             }
@@ -121,7 +132,7 @@ struct TaskDetailView: View {
                 Text("Type: \(info.type ?? "undefined")")
                     .font(.body)
                 Text("Comment: \(info.comment)")
-                    .font(.body)
+                    .font(.body   )
                 Text("Start time: \(info.startTime)")
                     .font(.body)
                 Text("End time: \(info.endTime)")
@@ -165,6 +176,6 @@ struct TaskDetailView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        View_TH()
+        ContentView()
     }
 }
