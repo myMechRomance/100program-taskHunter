@@ -11,17 +11,19 @@ import SwiftUI
 //    @Published var isPresented: Bool? = false
 //}
 
-struct PopUpView: View {
+struct ResultView: View {
 //    @EnvironmentObject var popUpControl: PopUpControl
     @EnvironmentObject var userData: UserData
     
     var body: some View {
-        ScrollView {
-            List {
-                ForEach(userData.tasks) { task in
-                    ResultItemView(task: task)
-                }
+        VStack {
+            Text("Result View")
+                .font(.title)
+                .bold()
+            ForEach(userData.tasks) { task in
+                ResultItemView(task: task)
             }
+            Spacer()
         }
 //        Text("This is PopUpView")
     }

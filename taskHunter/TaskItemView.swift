@@ -13,39 +13,46 @@ struct TaskItemView: View {
     @Binding var isEditing: Bool
     
     var body: some View {
-        HStack {
-            if isEditing {  //编辑中，显示删除按钮
+        if isEditing {  //编辑中，显示删除按钮
+            HStack {
                 Image(systemName: "minus.circle").foregroundColor(.red).onTapGesture(count: 1) {
                     deleteTask()
                 }
-                NavigationLink(destination: TaskEditView(task: $task), label: {Text(task.title)})
-            } else {  //未编辑，显示标题; 点击切换完成状态
-                Button(task.title) {
-                    toggleDone()
+                NavigationLink(destination: TaskEditView(task: $task), label: {TaskInfoView(task: task)})
+            }
+        } else {  //未编辑，显示标题; 点击切换完成状态
+            ZStack{
+                HStack {
+                    Button(action: {task.ifDone.toggle()}, label: {TaskInfoView(task: task)})
+                    Spacer()
                 }
-                Spacer()
-                if task.ifDone {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.green)
+                HStack {
+                    Spacer()
+                    if task.ifDone {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.green)
+                            .padding(10)
+                    }
                 }
             }
         }
     }
     
-    private func toggleDone() {
-        guard isEditing == false else {
-            return
-        }
-        guard let index = userData.tasks.firstIndex(where: {$0.id == task.id}) else {  //在tasks中检索task的id
-            return
-        }
-        userData.tasks[index].ifDone.toggle()
-    }
+//    private func toggleDone() {
+//        guard isEditing == false else {
+//            return
+//        }
+//        guard let index = userData.tasks.firstIndex(where: {$0.id == task.id}) else {  //在tasks中检索task的id
+//            return
+//        }
+//        userData.tasks[index].ifDone.toggle()
+//    }
     
     private func deleteTask() {
         userData.tasks.removeAll { (task) -> Bool in
             task.id == self.task.id
         }
+        userData.tasks = userData.tasks.compactMap {$0}
     }
     
 }

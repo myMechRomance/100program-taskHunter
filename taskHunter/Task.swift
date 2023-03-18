@@ -18,6 +18,6 @@ struct Task: Equatable, Hashable, Codable, Identifiable {
         id = UUID()
         self.title = title
         ifDone = false
-        species = "Undefined"
+        species = ""
     }
 }

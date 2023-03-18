@@ -12,8 +12,11 @@ struct ResultItemView: View {
     let task: Task
     
     var body: some View {
-        HStack {
-            Text(task.title)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.gray)
+            TaskInfoView(task: task)
+                
 //            Spacer()
 //            if task.ifDone {
 //                Image(systemName: "checkmark")

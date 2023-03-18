@@ -13,6 +13,7 @@
 		8D16B8AE29B76D800001496A /* UserDefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D16B8AD29B76D800001496A /* UserDefaultValue.swift */; };
 		8D16B8B029B784040001496A /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D16B8AF29B784040001496A /* TaskItemView.swift */; };
 		8D16B8B229B787A60001496A /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D16B8B129B787A60001496A /* TaskEditView.swift */; };
+		8D26573F29C567DA00E687C9 /* TaskInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26573E29C567DA00E687C9 /* TaskInfoView.swift */; };
 		8D583F9B29B8E29C0056488E /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D583F9A29B8E29C0056488E /* DateView.swift */; };
 		8D85B67629B8B7D80028F9D8 /* Species.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D85B67529B8B7D80028F9D8 /* Species.swift */; };
 		8D85B67829B8BF110028F9D8 /* SpeciesEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D85B67729B8BF110028F9D8 /* SpeciesEditView.swift */; };
@@ -54,6 +55,7 @@
 		8D16B8AD29B76D800001496A /* UserDefaultValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultValue.swift; sourceTree = "<group>"; };
 		8D16B8AF29B784040001496A /* TaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemView.swift; sourceTree = "<group>"; };
 		8D16B8B129B787A60001496A /* TaskEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditView.swift; sourceTree = "<group>"; };
+		8D26573E29C567DA00E687C9 /* TaskInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskInfoView.swift; sourceTree = "<group>"; };
 		8D583F9A29B8E29C0056488E /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		8D85B67529B8B7D80028F9D8 /* Species.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Species.swift; sourceTree = "<group>"; };
 		8D85B67729B8BF110028F9D8 /* SpeciesEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesEditView.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				8D8AE7E429A50F540039DB96 /* taskHunter.swift */,
 				8D8AE7E629A50F540039DB96 /* TaskListView.swift */,
 				8D16B8AF29B784040001496A /* TaskItemView.swift */,
+				8D26573E29C567DA00E687C9 /* TaskInfoView.swift */,
 				8DE2D4F529C332AD00728CCA /* ResultView.swift */,
 				8DE2D4F729C3396300728CCA /* ResultItemView.swift */,
 				8D16B8B129B787A60001496A /* TaskEditView.swift */,
@@ -315,6 +318,7 @@
 				8DE2D4F629C332AE00728CCA /* ResultView.swift in Sources */,
 				8D03188F29BB880900EC501F /* Day.swift in Sources */,
 				8D8AE7E729A50F540039DB96 /* TaskListView.swift in Sources */,
+				8D26573F29C567DA00E687C9 /* TaskInfoView.swift in Sources */,
 				8D583F9B29B8E29C0056488E /* DateView.swift in Sources */,
 				8DE8238D29B00BA6006F103E /* viewModel.swift in Sources */,
 				8D85B67629B8B7D80028F9D8 /* Species.swift in Sources */,

@@ -22,10 +22,11 @@ struct TaskListView: View {
     var body: some View {
         VStack {
             NavigationView {
-                List {
+                ScrollView {
                     TextField("Add task", text: $draftTitle, onCommit: {
                         createTask(draftTitle)
                     })
+                    .font(.title2)
                     .onSubmit {
                         draftTitle = ""
                     }
@@ -51,7 +52,7 @@ struct TaskListView: View {
             let _today = calendar.startOfDay(for: Date())
             userData.today = _today
         }) {  //弹出结算窗口
-            PopUpView()
+            ResultView()
         }
     }
 

@@ -21,7 +21,7 @@ struct SpeciesEditView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            TextField("Type", text: $draftSpecies, onCommit: {
+            TextField("Species", text: $draftSpecies, onCommit: {
                 if !userData.specieses.contains(where: {$0.title == draftSpecies}) {
                     userData.specieses.append(Species(title: draftSpecies))
                 }  //如果是新物种，添加到sepcieses
@@ -37,13 +37,14 @@ struct SpeciesEditView: View {
             if showDropDown {
                 List {
                     ForEach(userData.specieses.filter {$0.title.lowercased().hasPrefix(draftSpecies.lowercased())}) { species in
-                        Button(action: {
+                        Button(species.title) {
                             draftSpecies = species.title
                             showDropDown = false  //关闭下拉式菜单
-                        }) {
-                            Text(species.title)
                         }
                     }
+                    Button("Delete all species") {
+                        userData.specieses.removeAll()
+                    }.foregroundColor(.red)
                 }
             }
         }
