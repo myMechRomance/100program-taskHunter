@@ -6,50 +6,68 @@
 //
 import SwiftUI
 
+
+//enum mainView {
+//    case TaskListView
+//    case ResultView
+//}
+
 struct TaskListView: View {
     @EnvironmentObject var userData: UserData
-//    @State var isEditing = false
-//    @State var draftTitle = ""
-//    @State var today = Date()  //需要手动更新
-//    var dateView = AutoClearTask()  //用于显示日期&每日清空任务
-//
-//    var body: some View {
-//        VStack {
-//            dateView
-//            NavigationView {
-//                List {
-//                    TextField("Add task", text: $draftTitle, onCommit: {
-//                        createTask(draftTitle)
-//                    })
-//                    ForEach(userData.tasks) { task in
-//                        TaskItemView(task: task, isEditing: $isEditing)
-//                    }
-//                }
-//                .navigationBarItems(trailing: Button(action: {
-//                    isEditing.toggle()
-//                }, label: {
-//                    if self.isEditing {
-//                        Text("Done").bold()
-//                    } else {
-//                        Text("Edit").bold()
-//                    }
-//                }))
-//            }
-//        }
-//    }
-//
-////    init () {
-////        let autoClearTask = AutoClearTask()
-////    }
-//
-//    private func createTask(_ draftTitle: String) {
-//        guard draftTitle != "" else {return}
-//        userData.tasks.append(Task(title: draftTitle))
-//    }
+//    @EnvironmentObject var popUpControl: PopUpControl
+//    @State var ifPopUp = false
+    @State var isEditing = false
+    @State var draftTitle = ""
+    
     var body: some View {
-        DateView()
+        VStack {
+            NavigationView {
+                List {
+                    TextField("Add task", text: $draftTitle, onCommit: {
+                        createTask(draftTitle)
+                    })
+                    .onSubmit {
+                        draftTitle = ""
+                    }
+                    ForEach(userData.tasks.indices, id: \.self) { taskId in
+                        TaskItemView(task: $userData.tasks[taskId], isEditing: $isEditing)
+                    }
+                }
+                .navigationBarItems(leading: DateView(),
+                                    trailing: Button(action: {
+                    isEditing.toggle()
+                }, label: {
+                    if self.isEditing {
+                        Text("Done").bold()
+                    } else {
+                        Text("Edit").bold()
+                    }
+                }))
+            }
+        }
+        .sheet(isPresented: $userData.ifPopUp, onDismiss: {
+            userData.tasks.removeAll()
+            let calendar = Calendar.current
+            let _today = calendar.startOfDay(for: Date())
+            userData.today = _today
+        }) {  //弹出结算窗口
+            PopUpView()
+        }
+    }
+
+    private func createTask(_ draftTitle: String) {
+        guard draftTitle != "" else {return}
+        userData.tasks.append(Task(title: draftTitle))
     }
 }
+
+//struct TaskListView: View {
+//    @EnvironmentObject var userData: UserData
+//
+//    var body: some View {
+//        DateView()
+//    }
+//}
 
 /////Task outline in the task list
 //struct TaskView: View {
@@ -153,6 +171,24 @@ struct TaskListView: View {
 
 
 
+
+
+
+
+
+// //测试
+//struct TaskListView: View {
+//    @State private var text = ""
+//
+//    var body: some View {
+//        TextField("Input", text: $text)
+//            .textFieldStyle(.roundedBorder)
+//            .onSubmit {
+//                // 清空输入
+//                self.text = ""
+//            }
+//    }
+//}
 
 
 struct ContentView_Previews: PreviewProvider {

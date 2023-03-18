@@ -9,7 +9,7 @@ import SwiftUI
 ///单条任务显示
 struct TaskItemView: View {
     @EnvironmentObject var userData: UserData
-    let task: Task
+    @Binding var task: Task
     @Binding var isEditing: Bool
     
     var body: some View {
@@ -18,7 +18,7 @@ struct TaskItemView: View {
                 Image(systemName: "minus.circle").foregroundColor(.red).onTapGesture(count: 1) {
                     deleteTask()
                 }
-                NavigationLink(destination: TaskEditView(task: task), label: {Text(task.title)})
+                NavigationLink(destination: TaskEditView(task: $task), label: {Text(task.title)})
             } else {  //未编辑，显示标题; 点击切换完成状态
                 Button(task.title) {
                     toggleDone()

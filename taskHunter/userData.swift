@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+//import Foundation
 import Combine
 //TODO: 测试
 private let defaultTasks = [
@@ -19,6 +20,8 @@ private let defaultSpecieses = [
 //用于在不同视图间共享任务数据
 final class UserData: ObservableObject {
     let objectWillChange = PassthroughSubject<UserData, Never>()
+    var ifPopUp = false
+    
     //将defaultTasks传入tasks
     @UserDefaultValue(key: "tasks", defaultValue: defaultTasks)
     var tasks: [Task] {
@@ -32,12 +35,22 @@ final class UserData: ObservableObject {
             objectWillChange.send(self)
         }
     }
-    @UserDefaultValue(key: "lastOpenDate", defaultValue: Day(date: Date(timeIntervalSince1970: 0)))
-    var lastOpenDate: Day {
+    @UserDefaultValue(key: "today", defaultValue: Date(timeIntervalSince1970: 0))
+    var today: Date {
         didSet {
             objectWillChange.send(self)
         }
     }
+    
+    init () {
+        let calendar = Calendar.current
+        let _today = calendar.startOfDay(for: Date())
+        if today != _today {  //如果日期更迭，弹出结算窗口
+            ifPopUp = true
+        }
+    }
 }
+
+
 
 

@@ -6,30 +6,39 @@
 //
 
 import SwiftUI
-///每天第一次打开时自动清空tasks
+
 struct DateView: View {
     @EnvironmentObject var userData: UserData
-    @State var date = Day(date: Date())
-    @State var test = ""
+    var dateStr: String {
+        get {
+//            let calendar = Calendar.current
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            return dateFormatter.string(from: userData.today)
+        }
+    }
     
     var body: some View {
-        Text(getFormattedDate("yyyy/MM/dd"))
+        HStack {
+            Button(action: {previousDay()}) {
+                Image(systemName: "arrowtriangle.left.fill")
+                //                Text("previous")
+            }
+            Text(dateStr)
+                .bold()
+            Button(action: {nextDay()}) {
+                Image(systemName: "arrowtriangle.right.fill")
+                //                Text("next")
+            }
+        }
+        .font(.title)
     }
     
-    init() {
-        let calendar = Calendar.current
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM/dd"
-        if calendar.isDate(date.date, inSameDayAs: userData.lastOpenDate.date) {
-            return
-        }
-        userData.tasks.removeAll()
-        userData.lastOpenDate = date
+    func previousDay() {
+        userData.today = userData.today.addingTimeInterval(-24*60*60)
     }
-
-    private func getFormattedDate(_ format: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        return dateFormatter.string(from: date.date)
+    
+    func nextDay() {
+        userData.today = userData.today.addingTimeInterval(24*60*60)
     }
 }

@@ -10,10 +10,14 @@ import SwiftUI
 
 struct SpeciesEditView: View {
     @EnvironmentObject var userData: UserData
-//    @State private var specieses: Array<Species>
-//    private var draftType: State<String>
-    @State private var draftSpecies = ""
+    @Binding var task: Task
+    @State private var draftSpecies: String
     @State private var showDropDown = false
+    
+    init(task: Binding<Task>) {
+        self._task = task
+        _draftSpecies = State(initialValue: task.species.wrappedValue)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,6 +25,7 @@ struct SpeciesEditView: View {
                 if !userData.specieses.contains(where: {$0.title == draftSpecies}) {
                     userData.specieses.append(Species(title: draftSpecies))
                 }  //如果是新物种，添加到sepcieses
+                task.species = draftSpecies
             })
                 .onTapGesture {
                     showDropDown = true  //显示下拉式菜单
@@ -43,5 +48,4 @@ struct SpeciesEditView: View {
             }
         }
     }
-    
 }
