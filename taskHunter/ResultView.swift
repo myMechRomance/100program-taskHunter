@@ -16,14 +16,14 @@ struct ResultView: View {
     @EnvironmentObject var userData: UserData
     
     var body: some View {
-        VStack {
-            Text("Result View")
+        ScrollView {
+            Text("Hunting results")
                 .font(.title)
                 .bold()
             ForEach(userData.tasks) { task in
                 ResultItemView(task: task)
+                    .padding(10)
             }
-            Spacer()
         }
 //        Text("This is PopUpView")
     }

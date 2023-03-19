@@ -15,11 +15,16 @@ struct TaskItemView: View {
     var body: some View {
         if isEditing {  //编辑中，显示删除按钮
             HStack {
-                Image(systemName: "minus.circle").foregroundColor(.red).onTapGesture(count: 1) {
+                Image(systemName: "minus.circle")
+                    .foregroundColor(.red)
+                    .onTapGesture(count: 1) {
                     deleteTask()
                 }
                 NavigationLink(destination: TaskEditView(task: $task), label: {TaskInfoView(task: task)})
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.gray)
             }
+            .padding(10)
         } else {  //未编辑，显示标题; 点击切换完成状态
             ZStack{
                 HStack {

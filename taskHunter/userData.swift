@@ -8,14 +8,17 @@
 import SwiftUI
 //import Foundation
 import Combine
-//TODO: 测试
-private let defaultTasks = [
-    Task(title: "Do 20 bench presses"),
-    Task(title: "Read part 5 of THE TALE OF GENJI")
-]
+//private let defaultTasks = [
+//    Task(title: "Do 20 bench presses"),
+//    Task(title: "Read part 5 of THE TALE OF GENJI")
+//]
 private let defaultSpecieses = [
-    Species(title: "Muscle gorilla"),
-    Species(title: "Book worm")
+    Species(title: "Bull"),
+    Species(title: "Sloth"),
+    Species(title: "Automatron"),
+    Species(title: "Spider"),
+    Species(title: "Bookworm"),
+    Species(title: "Octopus")
 ]
 //用于在不同视图间共享任务数据
 final class UserData: ObservableObject {
@@ -23,7 +26,7 @@ final class UserData: ObservableObject {
     var ifPopUp = false
     
     //将defaultTasks传入tasks
-    @UserDefaultValue(key: "tasks", defaultValue: defaultTasks)
+    @UserDefaultValue(key: "tasks", defaultValue: [])
     var tasks: [Task] {
         didSet {
             objectWillChange.send(self)
@@ -43,6 +46,7 @@ final class UserData: ObservableObject {
     }
     
     init () {
+        specieses = defaultSpecieses
         let calendar = Calendar.current
         let _today = calendar.startOfDay(for: Date())
         if today != _today {  //如果日期更迭，弹出结算窗口

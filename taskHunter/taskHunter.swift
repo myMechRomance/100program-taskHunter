@@ -7,43 +7,32 @@
 
 import SwiftUI
 
-
-
 @main
 struct taskHunterApp: App {
     @EnvironmentObject var userData: UserData
-    
-//    init() {
-//        setLastOpenDate()
-//    }
-    
+    //测试
+    let defaultUserData = UserData()
+    init() {
+        defaultUserData.tasks = [
+            Task(title: "Do 20 bench presses", species: "Bull"),
+            Task(title: "Read part 5 of THE TALE OF GENJI", species: "Bookworm")
+        ]
+    }
+
     var body: some Scene {
             WindowGroup {
-                TaskListView().environmentObject(UserData())
+                TaskListView().environmentObject(defaultUserData)
             }
         }
-
-//    func setLastOpenDate() {
-//        let defaults = UserDefaults.standard
-//        let today = Date()
-//        // 获取最近一次打开应用程序的日期
-//        if let lastOpenedDate = defaults.object(forKey: "today") as? Date
-//        {
-//            print("Today: \(today)")
-//            print("lastOpenedDate: \(lastOpenedDate)")
-//            // 判断最近一次打开应用程序的日期是否与当前日期相同
-//            if Calendar.current.isDate(lastOpenedDate, inSameDayAs: today) {
-//                // 最近一次打开应用程序的日期与当前日期相同，不需要运行特定语句
-//            } else {
-//                // 最近一次打开应用程序的日期与当前日期不同，删除任务列表
-//                userData.tasks.removeAll()
-//                // 存储当前日期为最近一次打开应用程序的日期
-//                defaults.set(today, forKey: "today")
-//            }
-//        }
-//        else {
-//            defaults.set(today, forKey: "today")  //
-//            return
-//        }
+//
+//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+//        TaskListView().environmentObject(UserData(ifTest: true))
+//        return true
 //    }
 }
+
+
+///预设任务：
+///Do 20 bench presses
+///Read Chpt. 5 of Hamlet
+

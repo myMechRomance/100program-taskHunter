@@ -20,4 +20,12 @@ struct Task: Equatable, Hashable, Codable, Identifiable {
         ifDone = false
         species = ""
     }
+    
+    init(title: String, species: String) {
+        id = UUID()
+        self.title = title
+        ifDone = false
+        self.species = species
+    }
 }
+

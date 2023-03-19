@@ -19,11 +19,17 @@ struct TaskInfoView: View {
                 Image(systemName: "person")
                     .resizable()
                     .frame(width: 50, height: 50)
+                    .foregroundColor(.black)
                 VStack(alignment: .leading) {
-                    Text(task.title)
-                        .font(.title)
+                    ScrollView(.horizontal) {
+                        Text(task.title)
+                            .font(.title)
+                            .frame(maxWidth: .infinity)
+                            .lineLimit(nil)
+                    }
                     Text(task.species)
                 }
+                .foregroundColor(.black)
                 Spacer()
             }
             .padding(10)
